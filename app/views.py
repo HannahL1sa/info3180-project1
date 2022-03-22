@@ -5,9 +5,12 @@ Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file creates your application.
 """
 
-from app import app
-from flask import render_template, request, redirect, url_for
-
+import os
+from app import app, db
+from flask import render_template, request, redirect, url_for, flash, session, abort, send_from_directory
+from werkzeug.utils import secure_filename
+from app.forms import PropertyForm
+from app.models import Properties
 
 ###
 # Routing for your application.
@@ -24,6 +27,58 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
+@app.route('/properties/create', methods=['POST', 'GET'])
+def create_property():
+    form = PropertyForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            title = form.proptitle.data
+            description = form.description.data
+            rooms = form.beds.data
+            baths = form.baths.data
+            price = form.price.data
+            ptype = form.proptype.data
+            location = form.location.data
+            file = form.photo.data
+
+            #getting the filename of the image uploaded
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            propentry = Properties(title, description, rooms, baths, price, ptype, location, filename)
+            db.session.add(propentry)
+            db.session.commit()
+
+            flash('Property added!', 'success')
+            return redirect(url_for("view_all_properties"))
+        else:
+            fflash_errors(form)
+    return render_template("create.html", form=form)
+
+
+#helper function which iterates over the contents of the uploads folder and returns the filenames in a list 
+def get_uploaded_images():
+    import os
+    rootdir = os.getcwd()
+    file_list = []
+
+    for subdir, dirs, files in os.walk(rootdir + '/uploads'):
+        for file in files:
+            file_list.append(os.path.join(file))
+    return file_list
+
+
+
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    return send_from_directory(os.path.join(os.getcwd(),app.config['UPLOAD_FOLDER']), filename)
+
+@app.route('/properties')
+def view_all_properties():
+    prop = Properties.query.all()
+    return render_template('proplist.html', prop = prop)
+
+@app.route('/properties/<propertyid>')
 
 ###
 # The functions below should be applicable to all Flask apps.

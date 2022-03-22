@@ -1,3 +1,28 @@
 body {
     padding-top: 5rem;
+    background-color: rgb(207, 207, 207);
+}
+
+nav{
+    background-color: #17ad9e;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.form-container{
+    border-radius: 5px;
+    background-color: white;
+    padding: 20px;
+    width: 50%;
+}
+
+.form-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group{
+    margin-bottom: 20px;
 }
