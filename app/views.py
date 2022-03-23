@@ -52,26 +52,14 @@ def create_property():
             flash('Property added!', 'success')
             return redirect(url_for("view_all_properties"))
         else:
-            fflash_errors(form)
+            flash_errors(form)
     return render_template("create.html", form=form)
-
-
-#helper function which iterates over the contents of the uploads folder and returns the filenames in a list 
-def get_uploaded_images():
-    import os
-    rootdir = os.getcwd()
-    file_list = []
-
-    for subdir, dirs, files in os.walk(rootdir + '/uploads'):
-        for file in files:
-            file_list.append(os.path.join(file))
-    return file_list
-
 
 
 @app.route('/uploads/<filename>')
 def get_image(filename):
     return send_from_directory(os.path.join(os.getcwd(),app.config['UPLOAD_FOLDER']), filename)
+
 
 @app.route('/properties')
 def view_all_properties():
@@ -79,6 +67,9 @@ def view_all_properties():
     return render_template('proplist.html', prop = prop)
 
 @app.route('/properties/<propertyid>')
+def view_property(propertyid):
+    result = Properties.query.filter_by(property_id = propertyid).first()
+    return render_template('viewprop.html', result = result)
 
 ###
 # The functions below should be applicable to all Flask apps.
