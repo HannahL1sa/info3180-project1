@@ -1,17 +1,20 @@
 {% extends "base.html" %}
 
 {% block main %}
-{% for props in prop %}
-    <div class="property-card">
-        <img class="prop-image" src="{{ url_for('get_image', filename=props.property_photo) }}" alt="Property Image">
-        <div class="prop-details">
-            <h3>{{ props.title }}</h3>
-            <p>{{ props.location }}</p>
-            <div class="card-price"> {{ props.price}} </div>
-        </div>
-        <div class="card-btn">
-            <a href ="{{ url_for('view_property', propertyid=props.property_id) }}">View Property</a>
+<h1>Properties</h1>
+<div class="property-set">
+    {% for props in prop %}
+        <div class="property-card">
+            <img class="prop-image" src="{{ url_for('get_image', filename=props.property_photo) }}" alt="Property Image">
+            <div class="prop-details">
+                <h5>{{ props.title }}</h5>
+                <p>{{ props.location }}</p>
+                <div class="card-price"> {{ props.price}} </div>
+            </div>
+            <div class="card-btn">
+                <a href ="{{ url_for('view_property', propertyid=props.property_id) }}"><button class="prop-btn">View Property</button></a>
+            </div>
         </div>
         {% endfor %}
-    </div>
+ </div>
 {% endblock %}
