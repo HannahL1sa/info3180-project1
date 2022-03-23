@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block main %}
-<div class="property-card">
-    {% for props in prop %}
+{% for props in prop %}
+    <div class="property-card">
         <img class="prop-image" src="{{ url_for('get_image', filename=props.property_photo) }}" alt="Property Image">
         <div class="prop-details">
             <h3>{{ props.title }}</h3>
@@ -13,5 +13,5 @@
             <a href ="{{ url_for('view_property', propertyid=props.property_id) }}">View Property</a>
         </div>
         {% endfor %}
-</div>
+    </div>
 {% endblock %}

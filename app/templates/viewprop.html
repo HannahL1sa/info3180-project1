@@ -2,11 +2,13 @@
 
 {% block main %}
 <div class="view-card">
-    <img class="view-image" src="{{ url_for('get_image', result.property_photo) }}" alt="View Property" />
+    <img src="{{ url_for('get_image', filename=result.property_photo) }}" alt="View Property" />
     <div class="view-body">
         <h4 class="view-title">{{ result.title }}</h4>
-        <div class="view-price">{{ result.price }}</div>
-        <div class="view-type">{{ result.property_type }}</div>
+        <div class="view-space">
+            <div class="view-price">{{ result.price }}</div>
+            <div class="view-type">{{ result.property_type }}</div>
+        </div>
         <p>{{ result.description }}</p>
         <p>
             {{ result.num_bedrooms }} Bedrooms
